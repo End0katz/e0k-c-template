@@ -1,0 +1,8 @@
+# Compiler Output
+
+/out/
+/bin
+/bin_release
+/libbin.a
+/libbin.so
+/libbin-*.tar.gz
