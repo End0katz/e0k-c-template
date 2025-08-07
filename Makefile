@@ -112,9 +112,11 @@ tarball: lib$(NAME)-$(VERSION).tar.gz
 
 all: clean release devbuild tarball staticlib sharedlib test
 
+test: SHELL:=/bin/bash
 test:
 	@mkdir -p out/log/
-	@(cd test && $(MAKE) NAME=$(NAME) 2>&1) | tee out/log/test.log
+	@set -o pipefail; \
+	(cd test && $(MAKE) NAME=$(NAME) 2>&1) | tee out/log/test.log
 
 install_so: lib$(NAME).so
 	@if [ $$(id -u) -ne 0 ] && [ $(INSTALLTO) = /usr/local/bin ]; then echo --- YOU MAY WISH TO INSTALL AS ROOT; fi
