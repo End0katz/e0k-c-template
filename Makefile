@@ -36,10 +36,7 @@ dflt: devbuild test
 $(NAME): $(SRC_OBJFILES) $(GLOBALS) $(DETECT_GHOST_FILES)
 	$(CC) -o $@ out/objsrc/*.o $(LIBRARIES)
 
-out/objsrc/:
-	mkdir -p $@
-
-out/objsrc/%.o: src/%.c $(GLOBALS) | out/objsrc/ out/ghost/
+out/objsrc/%.o: src/%.c $(GLOBALS) | out/
 	@touch out/ghost/$*.c
 	$(CC) -MMD -MP -c $< -o $@
 
@@ -48,10 +45,7 @@ out/objsrc/%.o: src/%.c $(GLOBALS) | out/objsrc/ out/ghost/
 $(NAME)_release: clean $(REL_OBJFILES) $(GLOBALS) $(DETECT_GHOST_FILES)
 	$(CC) -o $@ out/objrel/*.o $(LIBRARIES)
 
-out/objrel/:
-	mkdir -p $@
-
-out/objrel/%.o: src/%.c $(GLOBALS) | out/objrel/ out/ghost/
+out/objrel/%.o: src/%.c $(GLOBALS) | out/
 	@touch out/ghost/$*.c
 	$(CC_RELEASE) -MMD -MP -c $< -o $@
 
@@ -60,10 +54,7 @@ out/objrel/%.o: src/%.c $(GLOBALS) | out/objrel/ out/ghost/
 lib$(NAME).a: $(SLL_OBJFILES) $(GLOBALS) $(DETECT_GHOST_FILES)
 	ar rcs $@ out/objsll/*.o $(INCLDEPS)
 
-out/objsll/:
-	mkdir -p $@
-
-out/objsll/%.o: src/%.c $(GLOBALS) | out/objsll/ out/ghost/
+out/objsll/%.o: src/%.c $(GLOBALS) | out/
 	@touch out/ghost/$*.c
 	$(CC) -MMD -MP -c $< -o $@
 
@@ -72,10 +63,7 @@ out/objsll/%.o: src/%.c $(GLOBALS) | out/objsll/ out/ghost/
 lib$(NAME).so: $(DLL_OBJFILES) $(GLOBALS) $(DETECT_GHOST_FILES)
 	$(CC) -o $@ -shared out/objdll/*.o $(INCLDEPS)
 
-out/objdll/:
-	mkdir -p $@
-
-out/objdll/%.o: src/%.c $(GLOBALS) | out/objdll/ out/ghost/
+out/objdll/%.o: src/%.c $(GLOBALS) | out/
 	@touch out/ghost/$*.c
 	$(CC) -MMD -MP -fPIC -c $< -o $@
 
@@ -130,6 +118,16 @@ uninstall:
 	rm -f $(INSTALLTO)/lib$(NAME).so
 	rm -f $(INSTALLTO)/lib$(NAME).a
 
+### Misc
+
+out/:
+	mkdir -p out/
+	mkdir -p out/objsrc/
+	mkdir -p out/objrel/
+	mkdir -p out/objsll/
+	mkdir -p out/objdll/
+	mkdir -p out/ghost/
+
 ### GHOST CHECKING
 
 src/%.c:
@@ -143,7 +141,4 @@ src/%.c:
 	echo; \
 	exit 1; \
 	fi
-
-out/ghost/:
-	mkdir -p $@
 
