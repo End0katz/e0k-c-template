@@ -18,8 +18,9 @@ log/%: $(LOG)/%.log
 
 ### TESTS
 
-$(LOG)/testbin.log: $(BIN)
+$(LOG)/testbin.log: SHELL:=/bin/bash
+$(LOG)/testbin.log: $(BIN) testbin.bash
 	@echo
-	./testbin.bash | tee $@
+	set -o pipefail; ./testbin.bash | tee $@
 	@echo
 
