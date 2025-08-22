@@ -25,4 +25,5 @@ void excode(
 
     fprintf(stderr, "perror(errno %d): ", errno);
     perror(0);
+    exit(code);
 }
