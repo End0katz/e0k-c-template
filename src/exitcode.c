@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <stdlib.h>
 
 void excode(
     enum excode code,
